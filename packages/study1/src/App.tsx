@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-
-import { chapter1 } from './chapters';
+import { Key } from 'react';
+import { lessons } from './chapters';
 import { Catalogue } from './features';
+import { useState } from 'react';
 
 const RootContainer = styled.div`
   width: 100vw;
@@ -21,14 +22,21 @@ const Canvas = styled.div`
 `;
 
 function App() {
+  const [nodeId, setNodeId] = useState<keyof typeof lessons>();
+
+  const onSelect = (nodes: Key[]) => {
+    const nodeId = nodes[0] as keyof typeof lessons;
+    setNodeId(nodeId);
+  };
+
+  const Lesson = nodeId && lessons[nodeId];
+
   return (
     <RootContainer>
       <CatalogueWrapper>
-        <Catalogue />
+        <Catalogue onSelect={onSelect} />
       </CatalogueWrapper>
-      <Canvas>
-        <chapter1.OrbitControl />
-      </Canvas>
+      <Canvas>{Lesson && <Lesson />}</Canvas>
     </RootContainer>
   );
 }
