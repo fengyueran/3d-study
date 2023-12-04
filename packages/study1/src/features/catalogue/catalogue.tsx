@@ -10,13 +10,13 @@ const treeData: DataNode[] = [
     key: '0',
     children: [
       {
-        title: '05.使用three.js渲染第一个场景和物体',
-        key: '0-5',
+        title: '04.创建3D场景',
+        key: '0-4',
         isLeaf: true,
       },
       {
-        title: '06.轨道控制器查看物体',
-        key: '0-6',
+        title: '08.光源对物体表面的影响',
+        key: '0-8',
         isLeaf: true,
       },
     ],
