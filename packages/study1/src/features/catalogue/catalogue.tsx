@@ -19,6 +19,11 @@ const treeData: DataNode[] = [
         key: '0-8',
         isLeaf: true,
       },
+      {
+        title: '12.Canvas画布大小变化',
+        key: '0-12',
+        isLeaf: true,
+      },
     ],
   },
   {
