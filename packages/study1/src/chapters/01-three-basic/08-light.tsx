@@ -35,9 +35,11 @@ export const Light = () => {
     //MeshBasicMaterial不受光照影响
     const cubeMaterial = new THREE.MeshLambertMaterial({
       color: 0xff0000,
+      transparent: true,
+      opacity: 0.5,
     });
     const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.position.set(0, 10, 0);
+    cube.position.set(0, 0, 0);
     scene.add(cube);
 
     const axesHelper = new THREE.AxesHelper(100);
@@ -46,11 +48,11 @@ export const Light = () => {
     // camera.lookAt(cube.position);
     // camera.lookAt(0, 0, 0);
 
-    const pointLight = new THREE.PointLight(0xffffff, 10, 10000);
-    pointLight.position.set(0, 0, 100);
+    const pointLight = new THREE.PointLight(0xffffff, 100000);
+    pointLight.position.set(50, 50, 50);
     scene.add(pointLight);
 
-    const pointLightHelper = new THREE.PointLightHelper(pointLight, 10);
+    const pointLightHelper = new THREE.PointLightHelper(pointLight, 4);
     scene.add(pointLightHelper);
 
     const webGLRenderer = new THREE.WebGLRenderer();
