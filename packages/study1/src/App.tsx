@@ -18,7 +18,7 @@ const CatalogueWrapper = styled.div`
 `;
 
 const Canvas = styled.div`
-  flex-grow: 1;
+  width: calc(100% - 300px);
 `;
 
 function App() {

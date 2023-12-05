@@ -24,6 +24,16 @@ const treeData: DataNode[] = [
         key: '0-12',
         isLeaf: true,
       },
+      {
+        title: '13.Stats使用',
+        key: '0-13',
+        isLeaf: true,
+      },
+      {
+        title: '14.透视相机体验',
+        key: '0-14',
+        isLeaf: true,
+      },
     ],
   },
   {
