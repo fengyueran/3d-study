@@ -55,6 +55,23 @@ export const Light = () => {
     const pointLightHelper = new THREE.PointLightHelper(pointLight, 4);
     scene.add(pointLightHelper);
 
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 100);
+    //通过position位置和target设置光的方向
+    directionalLight.position.set(20, 100, -50);
+    //方向光指向cube模型，默认为(0,0,0)
+    directionalLight.target = cube;
+    scene.add(directionalLight);
+
+    const directionalLightHelper = new THREE.DirectionalLightHelper(
+      directionalLight,
+      4,
+      0x00ffff
+    );
+    scene.add(directionalLightHelper);
+
     const webGLRenderer = new THREE.WebGLRenderer();
     webGLRenderer.setClearColor(new THREE.Color(0x000));
     webGLRenderer.setSize(container.clientWidth, container.clientHeight);
