@@ -32,7 +32,7 @@ export const Light = () => {
     scene.add(camera);
 
     const cubeGeometry = new THREE.BoxGeometry(50, 50, 50);
-    //MeshBasicMaterial不受光照影响
+    //MeshBasicMaterial不受光照影响， MeshLambertMaterial为漫反射材质
     const cubeMaterial = new THREE.MeshLambertMaterial({
       color: 0xff0000,
       transparent: true,

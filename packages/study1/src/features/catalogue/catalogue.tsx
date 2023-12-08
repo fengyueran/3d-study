@@ -34,6 +34,16 @@ const treeData: DataNode[] = [
         key: '1-14',
         isLeaf: true,
       },
+      {
+        title: '15.常见几何体',
+        key: '1-15',
+        isLeaf: true,
+      },
+      {
+        title: '16.高光材质',
+        key: '1-16',
+        isLeaf: true,
+      },
     ],
   },
   {

@@ -6,4 +6,6 @@ export const lessons = {
   '1-12': chapter1.SizeChange,
   '1-13': chapter1.Stats,
   '1-14': chapter1.PerspectiveCamera,
+  '1-15': chapter1.CommonShape,
+  '1-16': chapter1.MeshPhongMaterial,
 };
