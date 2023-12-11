@@ -4,21 +4,12 @@ import styled from 'styled-components';
 import * as dat from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+const gui = new dat.GUI();
+
 const Container = styled.div`
   height: 100%;
 `;
 
-const obj = {
-  x: 10,
-  y: 10,
-  z: 10,
-};
-
-const gui = new dat.GUI();
-
-gui.add(obj, 'x', 0, 100);
-gui.add(obj, 'y', 0, 100);
-gui.add(obj, 'y', 0, 100);
 // gui.domElement.style.width = '50px';
 
 //https://www.bilibili.com/video/BV14r4y1G7h4/?p=22&spm_id_from=pageDriver&vd_source=052a4a43fb6ce3b0077fb11d296a0c6e
@@ -75,6 +66,10 @@ export const Gui = () => {
     scene.add(ambientLight);
 
     gui.add(ambientLight, 'intensity', 0, 2);
+
+    gui.add(cube.position, 'x', 0, 100);
+    gui.add(cube.position, 'y', 0, 100);
+    gui.add(cube.position, 'z', 0, 100);
 
     const webGLRenderer = new THREE.WebGLRenderer({
       antialias: true, //启用抗锯齿
