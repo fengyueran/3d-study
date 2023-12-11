@@ -8,4 +8,6 @@ export const lessons = {
   '1-14': chapter1.PerspectiveCamera,
   '1-15': chapter1.CommonShape,
   '1-16': chapter1.MeshPhongMaterial,
+  '1-17': chapter1.RendererSetting,
+  '1-18': chapter1.Gui,
 };

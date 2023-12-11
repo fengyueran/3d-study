@@ -44,6 +44,16 @@ const treeData: DataNode[] = [
         key: '1-16',
         isLeaf: true,
       },
+      {
+        title: '17.渲染器设置',
+        key: '1-17',
+        isLeaf: true,
+      },
+      {
+        title: '18.Gui使用',
+        key: '1-18',
+        isLeaf: true,
+      },
     ],
   },
   {

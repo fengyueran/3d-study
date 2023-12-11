@@ -1,15 +1,28 @@
 import { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import styled from 'styled-components';
-
+import * as dat from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Container = styled.div`
   height: 100%;
 `;
 
-//https://www.bilibili.com/video/BV14r4y1G7h4?p=20&spm_id_from=pageDriver&vd_source=052a4a43fb6ce3b0077fb11d296a0c6e
-export const MeshPhongMaterial = () => {
+const obj = {
+  x: 10,
+  y: 10,
+  z: 10,
+};
+
+const gui = new dat.GUI();
+
+gui.add(obj, 'x', 0, 100);
+gui.add(obj, 'y', 0, 100);
+gui.add(obj, 'y', 0, 100);
+// gui.domElement.style.width = '50px';
+
+//https://www.bilibili.com/video/BV14r4y1G7h4/?p=22&spm_id_from=pageDriver&vd_source=052a4a43fb6ce3b0077fb11d296a0c6e
+export const Gui = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,28 +40,22 @@ export const MeshPhongMaterial = () => {
     );
 
     //相机挪得太远，远平面外的物体不会显示，相机位置的挪动不会改变视椎体的大小
-    camera.position.set(0, 0, 500);
+    camera.position.set(100, 100, 250);
     camera.lookAt(0, 0, 0);
     //相机对准哪个物体，哪个物体就在画布的中间
     // camera.lookAt(1000, 0, 1000);
     scene.add(camera);
 
     //高MeshLambertMaterial是漫反射，反射向四周发散
-    // const material = new THREE.MeshLambertMaterial({
-    //   color: 0xff0000,
-    // });
-
-    //高光网格材质，有高光的效果，是镜面反射，入射角和反射角一样
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xff0000,
-      // shininess的值越大，高光的范围就会变得更小，高光会更加集中，看起来更尖锐。反之，如果shininess的值较小，高光范围会更大，高光会更加散开，看起来更模糊。
-      shininess: 100, //高光强度
+    const material = new THREE.MeshLambertMaterial({
+      color: 0x00ffff,
     });
 
-    //球体
-    const sphereGeometry = new THREE.SphereGeometry(50);
-    const sphere = new THREE.Mesh(sphereGeometry, material);
-    scene.add(sphere);
+    //立方体
+    const cubeGeometry = new THREE.BoxGeometry(50, 50, 50);
+
+    const cube = new THREE.Mesh(cubeGeometry, material);
+    scene.add(cube);
 
     const axesHelper = new THREE.AxesHelper(100);
     scene.add(axesHelper);
@@ -67,9 +74,14 @@ export const MeshPhongMaterial = () => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
 
-    const webGLRenderer = new THREE.WebGLRenderer();
+    gui.add(ambientLight, 'intensity', 0, 2);
+
+    const webGLRenderer = new THREE.WebGLRenderer({
+      antialias: true, //启用抗锯齿
+    });
     webGLRenderer.setClearColor(new THREE.Color(0x000));
     webGLRenderer.setSize(container.clientWidth, container.clientHeight);
+    webGLRenderer.setPixelRatio(window.devicePixelRatio);
 
     container.appendChild(webGLRenderer.domElement);
 
