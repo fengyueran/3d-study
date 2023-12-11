@@ -65,11 +65,31 @@ export const Gui = () => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
 
-    gui.add(ambientLight, 'intensity', 0, 2);
+    const light = gui.addFolder('光源');
+    light.add(ambientLight, 'intensity', 0, 2).name('环境光').step(0.1);
+    light.add(directionalLight, 'intensity', 0, 2).name('平行光');
+    light.open(); //展开
 
     gui.add(cube.position, 'x', 0, 100);
     gui.add(cube.position, 'y', 0, 100);
     gui.add(cube.position, 'z', 0, 100);
+
+    const obj = {
+      color: 0x00ffff,
+      cubeX: 0,
+      rotate: false,
+    };
+    gui.addColor(obj, 'color').onChange((v) => {
+      cube.material.color.set(v);
+    });
+
+    gui.add(obj, 'cubeX', [-100, 0, 100]).onChange((v) => {
+      cube.position.x = v;
+    });
+
+    gui.add(obj, 'rotate').onChange((v) => {
+      cube.position.x = v;
+    });
 
     const webGLRenderer = new THREE.WebGLRenderer({
       antialias: true, //启用抗锯齿
@@ -87,6 +107,10 @@ export const Gui = () => {
     // orbitControls.update();
 
     function render() {
+      if (obj.rotate) {
+        cube.rotateY(0.01);
+      }
+
       requestAnimationFrame(render);
       webGLRenderer.render(scene, camera);
     }
