@@ -57,8 +57,30 @@ const treeData: DataNode[] = [
     ],
   },
   {
-    title: '02、Three.js开发入门与调试设置',
+    title: '02、Geometry',
     key: '2',
+    children: [
+      {
+        title: '01.几何体顶点位置数据',
+        key: '2-01',
+        isLeaf: true,
+      },
+      {
+        title: '04.构建一个矩形平面',
+        key: '2-04',
+        isLeaf: true,
+      },
+      {
+        title: '06.顶点法线数据',
+        key: '2-06',
+        isLeaf: true,
+      },
+      {
+        title: '08.旋转、缩放、平移',
+        key: '2-08',
+        isLeaf: true,
+      },
+    ],
   },
 ];
 

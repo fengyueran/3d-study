@@ -37,6 +37,7 @@ export const FirstScene = () => {
       color: 0xffff00,
       transparent: true,
       opacity: 0.5,
+      // wireframe: true,
     });
     const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     cube.position.set(0, 10, 0);
