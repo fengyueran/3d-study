@@ -82,6 +82,17 @@ const treeData: DataNode[] = [
       },
     ],
   },
+  {
+    title: '03、模型对象',
+    key: '3',
+    children: [
+      {
+        title: '03.模型材质颜色',
+        key: '3-03',
+        isLeaf: true,
+      },
+    ],
+  },
 ];
 
 interface Props {
