@@ -1,6 +1,7 @@
 import * as chapter1 from './01-three-basic';
 import * as chapter2 from './02-geometry';
 import * as chapter3 from './03-modal-obj';
+import * as chapter4 from './04-hierarchy-model';
 
 export const lessons = {
   '1-04': chapter1.FirstScene,
@@ -19,4 +20,8 @@ export const lessons = {
   '2-08': chapter2.Transform,
 
   '3-03': chapter3.Material,
+
+  '4-01': chapter4.Group,
+  '4-03': chapter4.LocalWorldCoordinate,
+  '4-05': chapter4.GroupRemove,
 };
