@@ -114,6 +114,17 @@ const treeData: DataNode[] = [
       },
     ],
   },
+  {
+    title: '05、纹理贴图',
+    key: '5',
+    children: [
+      {
+        title: '01.创建纹理贴图',
+        key: '5-01',
+        isLeaf: true,
+      },
+    ],
+  },
 ];
 
 interface Props {
