@@ -123,6 +123,11 @@ const treeData: DataNode[] = [
         key: '5-01',
         isLeaf: true,
       },
+      {
+        title: '02.自定义UV坐标',
+        key: '5-02',
+        isLeaf: true,
+      },
     ],
   },
 ];

@@ -27,4 +27,5 @@ export const lessons = {
   '4-05': chapter4.GroupRemove,
 
   '5-01': chapter5.CreateTexture,
+  '5-02': chapter5.CustomUV,
 };
