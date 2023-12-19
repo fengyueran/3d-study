@@ -3,6 +3,7 @@ import * as chapter2 from './02-geometry';
 import * as chapter3 from './03-modal-obj';
 import * as chapter4 from './04-hierarchy-model';
 import * as chapter5 from './05-texture';
+import * as chapter6 from './06-modal-load';
 
 export const lessons = {
   '1-04': chapter1.FirstScene,
@@ -28,4 +29,10 @@ export const lessons = {
 
   '5-01': chapter5.CreateTexture,
   '5-02': chapter5.CustomUV,
+  '5-03': chapter5.CircleGeometry,
+  '5-04': chapter5.TileArray,
+  '5-05': chapter5.PngTexture,
+  '5-06': chapter5.UvOffset,
+
+  '6-03': chapter6.LoadGltf,
 };

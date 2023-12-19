@@ -128,6 +128,37 @@ const treeData: DataNode[] = [
         key: '5-02',
         isLeaf: true,
       },
+      {
+        title: '03.圆形平面设置纹理贴图',
+        key: '5-03',
+        isLeaf: true,
+      },
+      {
+        title: '04.纹理对象瓷砖阵列',
+        key: '5-04',
+        isLeaf: true,
+      },
+      {
+        title: '05.透明图片贴图',
+        key: '5-05',
+        isLeaf: true,
+      },
+      {
+        title: '06.UV动画(offset偏移)',
+        key: '5-06',
+        isLeaf: true,
+      },
+    ],
+  },
+  {
+    title: '06、外部模型',
+    key: '6',
+    children: [
+      {
+        title: '03.加载外部三维模型(gltf)(**)',
+        key: '6-03',
+        isLeaf: true,
+      },
     ],
   },
 ];
