@@ -4,6 +4,7 @@ import * as chapter3 from './03-modal-obj';
 import * as chapter4 from './04-hierarchy-model';
 import * as chapter5 from './05-texture';
 import * as chapter6 from './06-modal-load';
+import * as chapter7 from './07-pbr-material';
 
 export const lessons = {
   '1-04': chapter1.FirstScene,
@@ -35,4 +36,8 @@ export const lessons = {
   '5-06': chapter5.UvOffset,
 
   '6-03': chapter6.LoadGltf,
+
+  '7-02': chapter7.PbrMaterial,
+  '7-03': chapter7.EnvMap,
+  '7-05': chapter7.PhysicalMaterial,
 };

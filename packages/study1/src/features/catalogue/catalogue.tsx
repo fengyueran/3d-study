@@ -161,6 +161,27 @@ const treeData: DataNode[] = [
       },
     ],
   },
+  {
+    title: '07、PBR材质与贴图',
+    key: '7',
+    children: [
+      {
+        title: '02.PBR材质金属度和粗糙度',
+        key: '7-02',
+        isLeaf: true,
+      },
+      {
+        title: '03.环境贴图',
+        key: '7-03',
+        isLeaf: true,
+      },
+      {
+        title: '05.MeshPhysicalMaterial清漆层',
+        key: '7-05',
+        isLeaf: true,
+      },
+    ],
+  },
 ];
 
 interface Props {
