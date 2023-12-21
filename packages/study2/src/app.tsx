@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Key } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import { lessons } from './chapters';
 import { Catalogue } from './features';
-import { useState } from 'react';
 
 const RootContainer = styled.div`
   width: 100vw;
@@ -18,25 +18,33 @@ const CatalogueWrapper = styled.div`
 `;
 
 const Canvas = styled.div`
-  flex-grow: 1;
+  width: calc(100% - 300px);
 `;
 
 function App() {
-  const [nodeId, setNodeId] = useState<keyof typeof lessons>();
+  const naviagte = useNavigate();
 
   const onSelect = (nodes: Key[]) => {
     const nodeId = nodes[0] as keyof typeof lessons;
-    setNodeId(nodeId);
+    if (lessons[nodeId]) {
+      naviagte(nodeId);
+    }
   };
 
-  const Lesson = nodeId && lessons[nodeId];
-
+  const First = lessons['0-5'];
   return (
     <RootContainer>
       <CatalogueWrapper>
         <Catalogue onSelect={onSelect} />
       </CatalogueWrapper>
-      <Canvas>{Lesson && <Lesson />}</Canvas>
+      <Canvas>
+        <Routes>
+          <Route path="/" element={<First />} />
+          {Object.entries(lessons).map(([path, Component]) => {
+            return <Route key={path} path={path} element={<Component />} />;
+          })}
+        </Routes>
+      </Canvas>
     </RootContainer>
   );
 }

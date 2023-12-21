@@ -22,8 +22,35 @@ const treeData: DataNode[] = [
     ],
   },
   {
-    title: '02、Three.js开发入门与调试设置',
-    key: '0-1',
+    title: '07、精通粒子特效',
+    key: '7',
+    children: [
+      {
+        title: '01.初识Points与点材质',
+        key: '7-1',
+        isLeaf: true,
+      },
+      {
+        title: '02.Points材质属性',
+        key: '7-2',
+        isLeaf: true,
+      },
+      {
+        title: '03.应用顶点着色打造绚丽多彩的天空',
+        key: '7-3',
+        isLeaf: true,
+      },
+      {
+        title: '04.实现漫天飞舞的雪花',
+        key: '7-4',
+        isLeaf: true,
+      },
+      {
+        title: '05.运用数学知识打造星系',
+        key: '7-5',
+        isLeaf: true,
+      },
+    ],
   },
 ];
 
