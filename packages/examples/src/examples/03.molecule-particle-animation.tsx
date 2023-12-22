@@ -10,6 +10,7 @@ import {
   CSS2DObject,
 } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { GUI } from 'dat.gui';
+import TWEEN from 'three/examples/jsm/libs/tween.module.js';
 
 import Al2O3 from './Al2O3.pdb';
 import ethanol from './ethanol.pdb';
@@ -109,7 +110,10 @@ export const MoleculeParticleAnimation = () => {
       gui.open();
     }
 
-    //
+    const lines = new THREE.Group();
+    const atoms = new THREE.Group();
+    const atomArray = [];
+    const atomPositions = [];
 
     function loadMolecule(model) {
       const url = ethanol;
@@ -154,7 +158,13 @@ export const MoleculeParticleAnimation = () => {
           object.position.copy(position);
           object.position.multiplyScalar(75);
           object.scale.multiplyScalar(25);
-          root.add(object);
+          atomPositions.push(
+            object.position.x,
+            object.position.y,
+            object.position.z
+          );
+          atoms.add(object);
+          atomArray.push(object);
 
           // const atom = json.atoms[i];
 
@@ -168,6 +178,7 @@ export const MoleculeParticleAnimation = () => {
           // label.position.copy(object.position);
           // root.add(label);
         }
+        root.add(atoms);
 
         positions = geometryBonds.getAttribute('position');
 
@@ -188,20 +199,104 @@ export const MoleculeParticleAnimation = () => {
 
           const object = new THREE.Mesh(
             boxGeometry,
-            new THREE.MeshPhongMaterial({ color: 0xffffff })
+            new THREE.MeshPhongMaterial({
+              color: 0xffffff,
+              transparent: true,
+              opacity: 1,
+            })
           );
           object.position.copy(start);
           object.position.lerp(end, 0.5);
           object.scale.set(5, 5, start.distanceTo(end));
           object.lookAt(end);
-          root.add(object);
+          lines.add(object);
         }
+        root.add(lines);
+        transition();
       });
     }
+
+    const particlesTotal = 9;
+    let current = 0;
+
+    for (let i = 0; i < particlesTotal; i++) {
+      atomPositions.push(
+        Math.random() * 300 - 200,
+        Math.random() * 300 - 200,
+        Math.random() * 300 - 200
+      );
+    }
+
+    const transition = () => {
+      const offset = current * particlesTotal * 3;
+      const duration = 2000;
+
+      for (let i = 0, j = offset; i < particlesTotal; i++, j += 3) {
+        const object = atomArray[i];
+        // debugger; //eslint-disable-line
+
+        new TWEEN.Tween(object.position)
+          .to(
+            {
+              x: atomPositions[j],
+              y: atomPositions[j + 1],
+              z: atomPositions[j + 2],
+            },
+            Math.random() * duration + duration
+          )
+          .easing(TWEEN.Easing.Exponential.InOut)
+          .start();
+      }
+
+      new TWEEN.Tween(this)
+        .to({}, duration * 3)
+        .onComplete(transition)
+        .start();
+
+      current = (current + 1) % 2;
+    };
+
+    // const tween = new TWEEN.Tween({ opacity: 0, scale: 25, positionX: 0 })
+    //   .to({ opacity: 1, scale: 40, positionX: 100 }, 30000)
+    //   .onUpdate((object) => {
+    //     lines.traverse((line) => {
+    //       // debugger; //eslint-disable-line
+    //       if (line.material) {
+    //         line.material.opacity = 1 - object.opacity;
+    //       }
+    //     });
+
+    //     atoms.traverse((atom) => {
+    //       // debugger; //eslint-disable-line
+    //       if (atom.material) {
+    //         // line.visible = true;
+    //         console.log('atom', atom.position);
+    //         // atom.position.x = object.positionX;
+    //         // atom.position.y = -object.positionX;
+    //         // atom.position.z = object.positionX;
+    //         atom.scale.set(object.scale, object.scale, object.scale);
+    //       }
+    //     });
+
+    //     // 在动画更新时的逻辑，例如修改透明度、位置等
+    //     // hydrogen1.position.y = 1 - object.opacity;
+    //     // hydrogen2.position.y = 1 - object.opacity;
+    //     // oxygen.position.y = 1 - object.opacity;
+    //     // // line.visible = true;
+    //     // line.material.opacity = object.opacity;
+    //   })
+    //   .onComplete(() => {
+    //     // 动画完成时的逻辑，例如添加更多的水分子等
+    //     console.log('Animation complete!');
+    //   });
+
+    // // 启动动画
+    // tween.start();
 
     renderer.setAnimationLoop(() => {
       // controls.update();
 
+      TWEEN.update();
       const time = Date.now() * 0.0004;
 
       root.rotation.x = time;
