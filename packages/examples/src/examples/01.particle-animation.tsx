@@ -62,35 +62,35 @@ export const ParticleAnimation = () => {
       });
       image.src = snow;
 
-      // Plane
+      // // Plane
 
-      const amountX = 16;
-      const amountZ = 32;
-      const separationPlane = 150;
-      const offsetX = ((amountX - 1) * separationPlane) / 2;
-      const offsetZ = ((amountZ - 1) * separationPlane) / 2;
+      // const amountX = 16;
+      // const amountZ = 32;
+      // const separationPlane = 150;
+      // const offsetX = ((amountX - 1) * separationPlane) / 2;
+      // const offsetZ = ((amountZ - 1) * separationPlane) / 2;
 
-      for (let i = 0; i < particlesTotal; i++) {
-        const x = (i % amountX) * separationPlane;
-        const z = Math.floor(i / amountX) * separationPlane;
-        const y = (Math.sin(x * 0.5) + Math.sin(z * 0.5)) * 200;
+      // for (let i = 0; i < particlesTotal; i++) {
+      //   const x = (i % amountX) * separationPlane;
+      //   const z = Math.floor(i / amountX) * separationPlane;
+      //   const y = (Math.sin(x * 0.5) + Math.sin(z * 0.5)) * 200;
 
-        positions.push(x - offsetX, y, z - offsetZ);
-      }
+      //   positions.push(x - offsetX, y, z - offsetZ);
+      // }
 
-      // Cube
+      // // Cube
 
-      const amount = 8;
-      const separationCube = 150;
-      const offset = ((amount - 1) * separationCube) / 2;
+      // const amount = 8;
+      // const separationCube = 150;
+      // const offset = ((amount - 1) * separationCube) / 2;
 
-      for (let i = 0; i < particlesTotal; i++) {
-        const x = (i % amount) * separationCube;
-        const y = Math.floor((i / amount) % amount) * separationCube;
-        const z = Math.floor(i / (amount * amount)) * separationCube;
+      // for (let i = 0; i < particlesTotal; i++) {
+      //   const x = (i % amount) * separationCube;
+      //   const y = Math.floor((i / amount) % amount) * separationCube;
+      //   const z = Math.floor(i / (amount * amount)) * separationCube;
 
-        positions.push(x - offset, y - offset, z - offset);
-      }
+      //   positions.push(x - offset, y - offset, z - offset);
+      // }
 
       // Random
 

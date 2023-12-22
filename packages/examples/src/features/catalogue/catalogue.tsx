@@ -6,8 +6,18 @@ const { DirectoryTree } = Tree;
 
 const treeData: DataNode[] = [
   {
-    title: '01、认识three.js与开发环境搭建',
-    key: '0',
+    title: '01、粒子动效',
+    key: '1',
+    isLeaf: true,
+  },
+  {
+    title: '02、加载PDB分子文件',
+    key: '2',
+    isLeaf: true,
+  },
+  {
+    title: '03、分子粒子特效',
+    key: '3',
     isLeaf: true,
   },
 ];
