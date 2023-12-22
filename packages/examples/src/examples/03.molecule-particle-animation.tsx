@@ -59,7 +59,6 @@ export const MoleculeParticleAnimation = () => {
     const offset = new THREE.Vector3();
 
     init();
-    animate();
 
     function init() {
       scene = new THREE.Scene();
@@ -85,24 +84,22 @@ export const MoleculeParticleAnimation = () => {
       root = new THREE.Group();
       scene.add(root);
 
-      //
-
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
 
-      labelRenderer = new CSS2DRenderer();
-      labelRenderer.setSize(container.clientWidth, container.clientHeight);
-      labelRenderer.domElement.style.position = 'absolute';
-      labelRenderer.domElement.style.top = '0px';
-      labelRenderer.domElement.style.pointerEvents = 'none';
+      // labelRenderer = new CSS2DRenderer();
+      // labelRenderer.setSize(container.clientWidth, container.clientHeight);
+      // labelRenderer.domElement.style.position = 'absolute';
+      // labelRenderer.domElement.style.top = '0px';
+      // labelRenderer.domElement.style.pointerEvents = 'none';
 
-      container.appendChild(labelRenderer.domElement);
+      // container.appendChild(labelRenderer.domElement);
 
-      controls = new TrackballControls(camera, renderer.domElement);
-      controls.minDistance = 500;
-      controls.maxDistance = 2000;
+      // controls = new TrackballControls(camera, renderer.domElement);
+      // controls.minDistance = 500;
+      // controls.maxDistance = 2000;
 
       //
 
@@ -125,7 +122,7 @@ export const MoleculeParticleAnimation = () => {
       loader.load(url, function (pdb) {
         const geometryAtoms = pdb.geometryAtoms;
         const geometryBonds = pdb.geometryBonds;
-        const json = pdb.json;
+        // const json = pdb.json;
 
         const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
         const sphereGeometry = new THREE.IcosahedronGeometry(1, 3);
@@ -137,7 +134,7 @@ export const MoleculeParticleAnimation = () => {
         geometryBonds.translate(offset.x, offset.y, offset.z);
 
         let positions = geometryAtoms.getAttribute('position');
-        const colors = geometryAtoms.getAttribute('color');
+        // const colors = geometryAtoms.getAttribute('color');
 
         const position = new THREE.Vector3();
         const color = new THREE.Color();
@@ -147,9 +144,9 @@ export const MoleculeParticleAnimation = () => {
           position.y = positions.getY(i);
           position.z = positions.getZ(i);
 
-          color.r = colors.getX(i);
-          color.g = colors.getY(i);
-          color.b = colors.getZ(i);
+          // color.r = colors.getX(i);
+          // color.g = colors.getY(i);
+          // color.b = colors.getZ(i);
 
           const material = new THREE.MeshPhongMaterial({ color: color });
 
@@ -159,17 +156,17 @@ export const MoleculeParticleAnimation = () => {
           object.scale.multiplyScalar(25);
           root.add(object);
 
-          const atom = json.atoms[i];
+          // const atom = json.atoms[i];
 
-          const text = document.createElement('div');
-          text.className = 'label';
-          text.style.color =
-            'rgb(' + atom[3][0] + ',' + atom[3][1] + ',' + atom[3][2] + ')';
-          text.textContent = atom[4];
+          // const text = document.createElement('div');
+          // text.className = 'label';
+          // text.style.color =
+          //   'rgb(' + atom[3][0] + ',' + atom[3][1] + ',' + atom[3][2] + ')';
+          // text.textContent = atom[4];
 
-          const label = new CSS2DObject(text);
-          label.position.copy(object.position);
-          root.add(label);
+          // const label = new CSS2DObject(text);
+          // label.position.copy(object.position);
+          // root.add(label);
         }
 
         positions = geometryBonds.getAttribute('position');
@@ -199,27 +196,20 @@ export const MoleculeParticleAnimation = () => {
           object.lookAt(end);
           root.add(object);
         }
-
-        render();
       });
     }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
+    renderer.setAnimationLoop(() => {
+      // controls.update();
 
       const time = Date.now() * 0.0004;
 
       root.rotation.x = time;
       root.rotation.y = time * 0.7;
 
-      render();
-    }
-
-    function render() {
       renderer.render(scene, camera);
-      labelRenderer.render(scene, camera);
-    }
+      // labelRenderer.render(scene, camera);
+    });
   }, []);
 
   return <Container ref={containerRef} />;
