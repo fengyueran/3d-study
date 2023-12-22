@@ -161,14 +161,14 @@ export const ParticleAnimation = () => {
       TWEEN.update();
       orbitControls.update();
 
-      const time = performance.now();
+      // const time = performance.now();
 
-      for (let i = 0, l = objects.length; i < l; i++) {
-        const object = objects[i];
-        const scale =
-          Math.sin((Math.floor(object.position.x) + time) * 0.002) * 0.3 + 1;
-        object.scale.set(scale, scale, scale);
-      }
+      // for (let i = 0, l = objects.length; i < l; i++) {
+      //   const object = objects[i];
+      //   const scale =
+      //     Math.sin((Math.floor(object.position.x) + time) * 0.002) * 0.3 + 1;
+      //   object.scale.set(scale, scale, scale);
+      // }
 
       renderer.render(scene, camera);
     }

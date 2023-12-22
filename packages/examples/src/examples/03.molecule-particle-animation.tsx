@@ -27,11 +27,24 @@ export const MoleculeParticleAnimation = () => {
   useEffect(() => {
     const container = containerRef.current!;
 
-    let camera, scene, renderer, labelRenderer;
+    let labelRenderer;
     let controls;
 
-    let root;
+    const scene = new THREE.Scene();
+    const root = new THREE.Group();
 
+    scene.background = new THREE.Color(0x050505);
+
+    const camera = new THREE.PerspectiveCamera(
+      70,
+      window.innerWidth / window.innerHeight,
+      1,
+      5000
+    );
+    camera.position.z = 1000;
+    scene.add(camera);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     const MOLECULES = {
       Ethanol: 'ethanol.pdb',
       Aspirin: 'aspirin.pdb',
@@ -62,18 +75,6 @@ export const MoleculeParticleAnimation = () => {
     init();
 
     function init() {
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x050505);
-
-      camera = new THREE.PerspectiveCamera(
-        70,
-        window.innerWidth / window.innerHeight,
-        1,
-        5000
-      );
-      camera.position.z = 1000;
-      scene.add(camera);
-
       const light1 = new THREE.DirectionalLight(0xffffff, 2.5);
       light1.position.set(1, 1, 1);
       scene.add(light1);
@@ -82,10 +83,8 @@ export const MoleculeParticleAnimation = () => {
       light2.position.set(-1, -1, 1);
       scene.add(light2);
 
-      root = new THREE.Group();
       scene.add(root);
 
-      renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
@@ -114,6 +113,18 @@ export const MoleculeParticleAnimation = () => {
     const atoms = new THREE.Group();
     const atomArray = [];
     const atomPositions = [];
+
+    const particlesTotal = 9;
+    const animationTypeCount = 2;
+    let current = 0;
+
+    for (let i = 0; i < particlesTotal; i++) {
+      atomPositions.push(
+        Math.random() * 300 - 200,
+        Math.random() * 300 - 200,
+        Math.random() * 300 - 200
+      );
+    }
 
     function loadMolecule(model) {
       const url = ethanol;
@@ -158,11 +169,15 @@ export const MoleculeParticleAnimation = () => {
           object.position.copy(position);
           object.position.multiplyScalar(75);
           object.scale.multiplyScalar(25);
-          atomPositions.push(
-            object.position.x,
-            object.position.y,
-            object.position.z
-          );
+          Math.random() * 300 - 200,
+            atomPositions.push(
+              object.position.x,
+              object.position.y,
+              object.position.z
+            );
+          object.position.x = Math.random() * 300 - 200;
+          object.position.y = Math.random() * 300 - 200;
+          object.position.z = Math.random() * 300 - 200;
           atoms.add(object);
           atomArray.push(object);
 
@@ -202,7 +217,7 @@ export const MoleculeParticleAnimation = () => {
             new THREE.MeshPhongMaterial({
               color: 0xffffff,
               transparent: true,
-              opacity: 1,
+              opacity: 0,
             })
           );
           object.position.copy(start);
@@ -216,82 +231,48 @@ export const MoleculeParticleAnimation = () => {
       });
     }
 
-    const particlesTotal = 9;
-    let current = 0;
-
-    for (let i = 0; i < particlesTotal; i++) {
-      atomPositions.push(
-        Math.random() * 300 - 200,
-        Math.random() * 300 - 200,
-        Math.random() * 300 - 200
-      );
-    }
-
     const transition = () => {
       const offset = current * particlesTotal * 3;
-      const duration = 2000;
+      const duration = 3000;
 
       for (let i = 0, j = offset; i < particlesTotal; i++, j += 3) {
         const object = atomArray[i];
         // debugger; //eslint-disable-line
 
-        new TWEEN.Tween(object.position)
+        const positionTween = new TWEEN.Tween(object.position)
           .to(
             {
               x: atomPositions[j],
               y: atomPositions[j + 1],
               z: atomPositions[j + 2],
             },
-            Math.random() * duration + duration
+            duration
           )
-          .easing(TWEEN.Easing.Exponential.InOut)
-          .start();
+          .easing(TWEEN.Easing.Exponential.InOut);
+
+        const start = current % animationTypeCount === 0 ? 0 : 1;
+        const end = start === 1 ? 0 : 1;
+        // console.log('start', start);
+        // console.log('end', end);
+
+        const opacityTween = new TWEEN.Tween({ opacity: start })
+          .to({ opacity: end }, 1000)
+          .onUpdate((obj) => {
+            lines.traverse((line) => {
+              if (line.material) {
+                line.material.opacity = obj.opacity;
+              }
+            });
+          })
+          .easing(TWEEN.Easing.Exponential.InOut);
+
+        positionTween.chain(opacityTween);
+        positionTween.start();
       }
 
-      new TWEEN.Tween(this)
-        .to({}, duration * 3)
-        .onComplete(transition)
-        .start();
-
-      current = (current + 1) % 2;
+      new TWEEN.Tween(this).to({}, 2000).onComplete(transition).start();
+      current = (current + 1) % animationTypeCount;
     };
-
-    // const tween = new TWEEN.Tween({ opacity: 0, scale: 25, positionX: 0 })
-    //   .to({ opacity: 1, scale: 40, positionX: 100 }, 30000)
-    //   .onUpdate((object) => {
-    //     lines.traverse((line) => {
-    //       // debugger; //eslint-disable-line
-    //       if (line.material) {
-    //         line.material.opacity = 1 - object.opacity;
-    //       }
-    //     });
-
-    //     atoms.traverse((atom) => {
-    //       // debugger; //eslint-disable-line
-    //       if (atom.material) {
-    //         // line.visible = true;
-    //         console.log('atom', atom.position);
-    //         // atom.position.x = object.positionX;
-    //         // atom.position.y = -object.positionX;
-    //         // atom.position.z = object.positionX;
-    //         atom.scale.set(object.scale, object.scale, object.scale);
-    //       }
-    //     });
-
-    //     // 在动画更新时的逻辑，例如修改透明度、位置等
-    //     // hydrogen1.position.y = 1 - object.opacity;
-    //     // hydrogen2.position.y = 1 - object.opacity;
-    //     // oxygen.position.y = 1 - object.opacity;
-    //     // // line.visible = true;
-    //     // line.material.opacity = object.opacity;
-    //   })
-    //   .onComplete(() => {
-    //     // 动画完成时的逻辑，例如添加更多的水分子等
-    //     console.log('Animation complete!');
-    //   });
-
-    // // 启动动画
-    // tween.start();
 
     renderer.setAnimationLoop(() => {
       // controls.update();
