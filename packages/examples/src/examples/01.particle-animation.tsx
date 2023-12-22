@@ -23,21 +23,8 @@ export const ParticleAnimation = () => {
   useEffect(() => {
     const container = containerRef.current!;
 
-    // container.appendChild(webGLRenderer.domElement);
-
-    // const orbitControls = new OrbitControls(camera, webGLRenderer.domElement);
-    // //设置阻尼器，让控制器更有真实效果
-    // orbitControls.enableDamping = true;
-
-    // function render() {
-    //   requestAnimationFrame(render);
-    //   webGLRenderer.render(scene, camera);
-    //   orbitControls.update();
-    // }
-    // render();
-
     let camera, scene, renderer;
-    let controls;
+    let orbitControls;
 
     const particlesTotal = 512;
     const positions = [];
@@ -130,18 +117,14 @@ export const ParticleAnimation = () => {
         );
       }
 
-      //
-
       renderer = new CSS3DRenderer();
+
+      orbitControls = new OrbitControls(camera, renderer.domElement);
+      //设置阻尼器，让控制器更有真实效果
+      orbitControls.enableDamping = true;
 
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
-
-      //
-
-      // controls = new TrackballControls(camera, renderer.domElement);
-
-      //
     }
 
     function transition() {
@@ -176,7 +159,7 @@ export const ParticleAnimation = () => {
       requestAnimationFrame(animate);
 
       TWEEN.update();
-      // controls.update();
+      orbitControls.update();
 
       const time = performance.now();
 
