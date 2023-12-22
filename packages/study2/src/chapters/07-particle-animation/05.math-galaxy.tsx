@@ -29,56 +29,67 @@ export const MathGalaxy = () => {
     scene.add(camera);
 
     const params = {
-      count: 1000,
-      size: 1,
+      count: 10000,
+      size: 2,
       radius: 5,
-      branch: 3,
-      color: '#ffffff',
+      branch: 1000,
+      color: '#ff6030',
+      endColor: '#1b3984',
       rotateScale: 0.3,
     };
 
     const geometry = new THREE.BufferGeometry();
 
     const generateGalaxy = () => {
-      const { count, radius, branch, rotateScale } = params;
+      const { count, radius, branch, rotateScale, color } = params;
       const positions = new Float32Array(count * 3);
       const colors = new Float32Array(count * 3);
+      const centerColor = new THREE.Color(color);
+      const endColor = new THREE.Color(params.endColor);
       for (let i = 0; i < count; i++) {
         const current = i * 3;
-
-        const randomX = Math.pow(Math.random() * 2 - 1, 3);
-        const randomY = Math.pow(Math.random() * 2 - 1, 3);
-        const randomZ = Math.pow(Math.random() * 2 - 1, 3);
 
         //当前点应该在哪一条分支上(角度平分)
         const branchAngel = (i % branch) * ((2 * Math.PI) / branch);
 
         //当前点距离圆心的距离
-        const distance = Math.random() * radius;
+        const distance = Math.random() * radius * Math.pow(Math.random(), 3);
+
+        //-1-1
+        const randomX =
+          (Math.pow(Math.random() * 2 - 1, 3) * (radius - distance)) / 5;
+        const randomY =
+          (Math.pow(Math.random() * 2 - 1, 3) * (radius - distance)) / 5;
+        const randomZ =
+          (Math.pow(Math.random() * 2 - 1, 3) * (radius - distance)) / 5;
+
         positions[current] =
           Math.cos(branchAngel + distance * rotateScale) * distance + randomX;
         positions[current + 1] = randomY;
         positions[current + 2] =
           Math.sin(branchAngel + distance * 0.3) * distance + randomZ;
+
+        //混合颜色，形成渐变色
+        const mixColor = centerColor.clone();
+        mixColor.lerp(endColor, distance / radius);
+        colors[current] = mixColor.r;
+        colors[current + 1] = mixColor.g;
+        colors[current + 2] = mixColor.b;
       }
 
       geometry.setAttribute(
         'position',
         new THREE.BufferAttribute(positions, 3)
       );
-      // geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-      const loader = new THREE.TextureLoader();
-      const texture = loader.load(snow);
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
       const pointMaterial = new THREE.PointsMaterial({
-        color: new THREE.Color(params.color),
         size: params.size,
         sizeAttenuation: false, //为true时会根据深度而衰减，z越小，size越小，透视相机有效，默认为true
         depthWrite: false,
         blending: THREE.AdditiveBlending, //两个物体重合时颜色混合
         transparent: true,
-        // map: texture,
-        // vertexColors: true,
+        vertexColors: true,
       });
 
       const points = new THREE.Points(geometry, pointMaterial);
