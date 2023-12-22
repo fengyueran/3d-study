@@ -27,7 +27,7 @@ const gui = new GUI();
 const Container = styled.div`
   height: 100%;
 `;
-const getRandom = () => Math.random() * 300 - 200;
+const getRandom = () => Math.random() * 600 - 200;
 
 const loadMolecule = (
   url: string
@@ -337,8 +337,8 @@ export const MoleculeParticleAnimation = () => {
         TWEEN.update();
         const time = Date.now() * 0.0004;
 
-        root.rotation.x = time;
-        root.rotation.y = time * 0.7;
+        root.rotation.x = time * 0.5;
+        root.rotation.y = time * 0.07;
 
         renderer.render(scene, camera);
         // labelRenderer.render(scene, camera);
