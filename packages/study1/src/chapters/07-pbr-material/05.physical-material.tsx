@@ -80,8 +80,6 @@ export const PhysicalMaterial = () => {
 
           //玻璃
           if (obj.material?.name === 'black_glass') {
-            debugger; //eslint-disable-line
-
             obj.material = new THREE.MeshPhysicalMaterial({
               //透光率0-1，越大越透光
               transmission: 1,

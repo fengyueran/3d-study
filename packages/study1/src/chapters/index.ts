@@ -5,6 +5,8 @@ import * as chapter4 from './04-hierarchy-model';
 import * as chapter5 from './05-texture';
 import * as chapter6 from './06-modal-load';
 import * as chapter7 from './07-pbr-material';
+import * as chapter8 from './08-renderer';
+import * as other from './other';
 
 export const lessons = {
   '1-04': chapter1.FirstScene,
@@ -40,4 +42,10 @@ export const lessons = {
   '7-02': chapter7.PbrMaterial,
   '7-03': chapter7.EnvMap,
   '7-05': chapter7.PhysicalMaterial,
+
+  '8-05': chapter8.SaveCanvas,
+  '8-06': chapter8.DeepthConflict,
+
+  '9-01': other.PostProcess,
+  '9-02': other.RayCaster,
 };

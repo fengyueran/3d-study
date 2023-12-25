@@ -182,6 +182,38 @@ const treeData: DataNode[] = [
       },
     ],
   },
+  {
+    title: '08、渲染器',
+    key: '8',
+    children: [
+      {
+        title: '05.渲染结果保存为图片',
+        key: '8-05',
+        isLeaf: true,
+      },
+      {
+        title: '06.深度冲突',
+        key: '8-06',
+        isLeaf: true,
+      },
+    ],
+  },
+  {
+    title: '其他',
+    key: '9',
+    children: [
+      {
+        title: '后处理器',
+        key: '9-01',
+        isLeaf: true,
+      },
+      {
+        title: '选择物体',
+        key: '9-02',
+        isLeaf: true,
+      },
+    ],
+  },
 ];
 
 interface Props {
