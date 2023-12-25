@@ -26,7 +26,7 @@ const Container = styled.div`
 export const PhysicalMaterial = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const modal = new THREE.Group();
+  const modalGroup = new THREE.Group();
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -55,25 +55,39 @@ export const PhysicalMaterial = () => {
     loader.load(
       coffeemat,
       (gltf) => {
-        modal.add(gltf.scene);
-        const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
-        //查看模型大小
-        console.log('Bounding Box:', boundingBox);
+        modalGroup.add(gltf.scene);
+
+        // const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+        // //查看模型大小
+        // console.log('Bounding Box:', boundingBox);
 
         const modal = gltf.scene.getObjectByName('body') as THREE.Mesh;
-        debugger; //eslint-disable-line
 
         gltf.scene.traverse((obj) => {
           console.log('obj.name', obj.material);
+          //车身
           if (obj.material?.name === 'body') {
             obj.material = new THREE.MeshPhysicalMaterial({
               // color: 'red',
               metalness: 0.9,
               roughness: 0.5,
+              clearcoatRoughness: 0.1,
               //清漆层，物体表面透明图层厚度，0-1
               clearcoat: 0.1,
             });
             gui.add(obj.material, 'clearcoat', 0, 1);
+          }
+
+          //玻璃
+          if (obj.material?.name === 'black_glass') {
+            debugger; //eslint-disable-line
+
+            obj.material = new THREE.MeshPhysicalMaterial({
+              //透光率0-1，越大越透光
+              transmission: 1,
+              //折射率15-2.33
+              ior: 1.5,
+            });
           }
         });
       },
@@ -83,7 +97,7 @@ export const PhysicalMaterial = () => {
       }
     );
 
-    scene.add(modal);
+    scene.add(modalGroup);
 
     //环境贴图影响所有模型
     // scene.environment = cubeTexture;
