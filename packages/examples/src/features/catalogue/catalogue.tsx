@@ -20,6 +20,11 @@ const treeData: DataNode[] = [
     key: '3',
     isLeaf: true,
   },
+  {
+    title: '04、正交投影相机',
+    key: '4',
+    isLeaf: true,
+  },
 ];
 
 interface Props {
