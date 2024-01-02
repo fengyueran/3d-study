@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pdb'],
   server: {
-    // host: '0.0.0.0',
+    host: '0.0.0.0',
   },
 });

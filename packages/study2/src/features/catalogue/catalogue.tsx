@@ -52,6 +52,22 @@ const treeData: DataNode[] = [
       },
     ],
   },
+  {
+    title: '20、曲线应用与轨迹运动',
+    key: '20',
+    children: [
+      {
+        title: '01.曲线使用与绘制流程',
+        key: '20-1',
+        isLeaf: true,
+      },
+      {
+        title: '02.让物体与相机沿着曲线轨迹运动',
+        key: '20-2',
+        isLeaf: true,
+      },
+    ],
+  },
 ];
 
 interface Props {
