@@ -3,6 +3,7 @@ import { WebglLoaderPdb } from './02.webgl-loader-pdb';
 import { MoleculeParticleAnimation } from './03.molecule-particle-animation';
 import { OrthographicCamera } from './04.orthographic-camera';
 import { PerspectiveCamera } from './05.perspective-camera';
+import { WebglPointsWaves } from './06.webgl-points-waves';
 
 export const examples = {
   '1': ParticleAnimation,
@@ -10,4 +11,5 @@ export const examples = {
   '3': MoleculeParticleAnimation,
   '4': OrthographicCamera,
   '5': PerspectiveCamera,
+  '6': WebglPointsWaves,
 };
