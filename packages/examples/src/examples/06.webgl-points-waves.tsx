@@ -1,168 +1,154 @@
 import { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import styled from 'styled-components';
-
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Container = styled.div`
+  width: 100%;
   height: 100%;
 `;
 
-const vertexShader = `
-attribute float scale;
+class Wave {
+  private vertexShader = `
+    attribute float scale;
+    
+    void main() {
+    
+      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+    
+      gl_PointSize =  1300.0 / - mvPosition.z;
+    
+      gl_Position = projectionMatrix * mvPosition;
+    
+    }
+  `;
 
-void main() {
+  private fragmentShader = `
+    uniform vec3 color;
+    
+    void main() {
+      gl_FragColor = vec4( color, 1.0 );
+    
+    }
+  `;
 
-  vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+  private AmountX = 60;
+  private AmountY = 20;
+  private Interval = 15;
 
-  gl_PointSize = scale * ( 300.0 / - mvPosition.z );
+  private positionYFactor = 0;
 
-  gl_Position = projectionMatrix * mvPosition;
+  points: THREE.Points<
+    THREE.BufferGeometry<THREE.NormalBufferAttributes>,
+    THREE.ShaderMaterial
+  >;
 
-}
-`;
+  constructor() {
+    this.points = this.createPoints();
+  }
 
-const fragmentShader = `
-uniform vec3 color;
+  private createParticlesGeometry = () => {
+    const particlesNum = this.AmountX * this.AmountY;
 
-void main() {
+    const positions = new Float32Array(particlesNum * 3);
 
-  if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
+    let i = 0;
 
-  gl_FragColor = vec4( color, 1.0 );
-
-}
-`;
-
-export const WebglPointsWaves = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current!;
-
-    const SEPARATION = 100,
-      AMOUNTX = 50,
-      AMOUNTY = 50;
-
-    let camera, scene, renderer;
-
-    let particles,
-      count = 0;
-
-    let mouseX = 0,
-      mouseY = 0;
-
-    let windowHalfX = window.innerWidth / 2;
-    let windowHalfY = window.innerHeight / 2;
-
-    camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      1,
-      10000
-    );
-    camera.position.z = 1000;
-
-    scene = new THREE.Scene();
-
-    //
-
-    const numParticles = AMOUNTX * AMOUNTY;
-
-    const positions = new Float32Array(numParticles * 3);
-    const scales = new Float32Array(numParticles);
-
-    let i = 0,
-      j = 0;
-
-    for (let ix = 0; ix < AMOUNTX; ix++) {
-      for (let iy = 0; iy < AMOUNTY; iy++) {
-        positions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2; // x
-        positions[i + 1] = 0; // y
-        positions[i + 2] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2; // z
-
-        scales[j] = 1;
+    for (let xNum = 0; xNum < this.AmountX; xNum++) {
+      for (let yNum = 0; yNum < this.AmountY; yNum++) {
+        positions[i] =
+          xNum * this.Interval - (this.AmountX * this.Interval) / 2;
+        positions[i + 1] = 0;
+        positions[i + 2] =
+          yNum * this.Interval - (this.AmountY * this.Interval) / 2;
 
         i += 3;
-        j++;
       }
     }
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+
+    return geometry;
+  };
+
+  private createPoints = () => {
+    const geometry = this.createParticlesGeometry();
 
     const material = new THREE.ShaderMaterial({
       uniforms: {
-        color: { value: new THREE.Color(0xffffff) },
+        color: { value: new THREE.Color('#1677ff') },
       },
-      vertexShader,
-      fragmentShader,
+      vertexShader: this.vertexShader,
+      fragmentShader: this.fragmentShader,
     });
 
-    //
+    const particles = new THREE.Points(geometry, material);
+    return particles;
+  };
 
-    particles = new THREE.Points(geometry, material);
-    scene.add(particles);
+  updatePointsPosition = () => {
+    const positions = this.points.geometry.attributes.position.array;
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setClearColor(new THREE.Color(0x000));
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    let i = 0;
 
-    container.appendChild(renderer.domElement);
-    const orbitControls = new OrbitControls(camera, renderer.domElement);
-
-    container.addEventListener('pointermove', onPointerMove);
-
-    function onPointerMove(event) {
-      if (event.isPrimary === false) return;
-
-      mouseX = event.clientX - windowHalfX;
-      mouseY = event.clientY - windowHalfY;
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      render();
-    }
-
-    animate();
-
-    function render() {
-      camera.position.x += (mouseX - camera.position.x) * 0.05;
-      camera.position.y += (-mouseY - camera.position.y) * 0.05;
-      camera.lookAt(scene.position);
-
-      const positions = particles.geometry.attributes.position.array;
-      const scales = particles.geometry.attributes.scale.array;
-
-      let i = 0,
-        j = 0;
-
-      for (let ix = 0; ix < AMOUNTX; ix++) {
-        for (let iy = 0; iy < AMOUNTY; iy++) {
-          positions[i + 1] =
-            Math.sin((ix + count) * 0.3) * 50 +
-            Math.sin((iy + count) * 0.5) * 50;
-
-          scales[j] =
-            (Math.sin((ix + count) * 0.3) + 1) * 20 +
-            (Math.sin((iy + count) * 0.5) + 1) * 20;
-
-          i += 3;
-          j++;
-        }
+    for (let xNum = 0; xNum < this.AmountX; xNum++) {
+      for (let yNum = 0; yNum < this.AmountY; yNum++) {
+        positions[i + 1] =
+          Math.sin((xNum + this.positionYFactor) * 0.3) * 10 +
+          Math.sin((yNum + this.positionYFactor) * 0.5) * 10;
+        i += 3;
       }
-
-      particles.geometry.attributes.position.needsUpdate = true;
-      particles.geometry.attributes.scale.needsUpdate = true;
-
-      renderer.render(scene, camera);
-
-      count += 0.1;
     }
+
+    this.points.geometry.attributes.position.needsUpdate = true;
+    this.positionYFactor += 0.1;
+  };
+}
+
+const initRenderBase = (canvasWidth: number, canvasHeight: number) => {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    canvasWidth / canvasHeight,
+    1,
+    10000
+  );
+
+  //Obtain the camera position and rotation in advance through OrbitControls
+  camera.position.set(-7, 107, 279);
+  camera.rotation.set(-0.36, -0.023, -0.009);
+
+  const wave = new Wave();
+  scene.add(wave.points);
+
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setClearAlpha(0);
+  renderer.setSize(canvasWidth, canvasHeight);
+  return { wave, renderer, scene, camera };
+};
+
+export const PointsWaves = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current!;
+
+    const { wave, renderer, scene, camera } = initRenderBase(
+      container.clientWidth,
+      container.clientHeight
+    );
+
+    // const orbitControls = new OrbitControls(camera, renderer.domElement);
+    container.appendChild(renderer.domElement);
+
+    const render = () => {
+      requestAnimationFrame(render);
+      wave.updatePointsPosition();
+      renderer.render(scene, camera);
+    };
+
+    render();
   }, []);
 
   return <Container ref={containerRef} />;

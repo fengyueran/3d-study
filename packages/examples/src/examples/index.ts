@@ -1,15 +1,15 @@
 import { ParticleAnimation } from './01.particle-animation';
 import { WebglLoaderPdb } from './02.webgl-loader-pdb';
-import { MoleculeParticleAnimation } from './03.molecule-particle-animation';
+import { MoleculeAnimation } from './03.molecule-particle-animation';
 import { OrthographicCamera } from './04.orthographic-camera';
 import { PerspectiveCamera } from './05.perspective-camera';
-import { WebglPointsWaves } from './06.webgl-points-waves';
+import { PointsWaves } from './06.webgl-points-waves';
 
 export const examples = {
   '1': ParticleAnimation,
   '2': WebglLoaderPdb,
-  '3': MoleculeParticleAnimation,
+  '3': MoleculeAnimation,
   '4': OrthographicCamera,
   '5': PerspectiveCamera,
-  '6': WebglPointsWaves,
+  '6': PointsWaves,
 };
