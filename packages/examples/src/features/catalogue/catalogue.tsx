@@ -35,6 +35,11 @@ const treeData: DataNode[] = [
     key: '6',
     isLeaf: true,
   },
+  {
+    title: '07、渐变颜色',
+    key: '7',
+    isLeaf: true,
+  },
 ];
 
 interface Props {

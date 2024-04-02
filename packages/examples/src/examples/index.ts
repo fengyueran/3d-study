@@ -4,6 +4,7 @@ import { MoleculeAnimation } from './03.molecule-particle-animation';
 import { OrthographicCamera } from './04.orthographic-camera';
 import { PerspectiveCamera } from './05.perspective-camera';
 import { PointsWaves } from './06.webgl-points-waves';
+import { GradientEdgeSphere } from './07.gradient-edge-sphere';
 
 export const examples = {
   '1': ParticleAnimation,
@@ -12,4 +13,5 @@ export const examples = {
   '4': OrthographicCamera,
   '5': PerspectiveCamera,
   '6': PointsWaves,
+  '7': GradientEdgeSphere,
 };
