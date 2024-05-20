@@ -41,8 +41,13 @@ const treeData: DataNode[] = [
     isLeaf: true,
   },
   {
-    title: '08、物体充满视图',
+    title: '08、物体充满视图(透视投影)',
     key: '8',
+    isLeaf: true,
+  },
+  {
+    title: '09、物体充满视图(正交投影)',
+    key: '9',
     isLeaf: true,
   },
 ];

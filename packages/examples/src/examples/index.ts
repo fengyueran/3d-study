@@ -5,7 +5,8 @@ import { OrthographicCamera } from './04.orthographic-camera';
 import { PerspectiveCamera } from './05.perspective-camera';
 import { PointsWaves } from './06.webgl-points-waves';
 import { GradientEdgeSphere } from './07.gradient-edge-sphere';
-import { FullView } from './08.full-view';
+import { FullView } from './08.full-view-perspective-camera';
+import { OrthographicCameraFullView } from './09.full-view-orthographic-camera';
 
 export const examples = {
   '1': ParticleAnimation,
@@ -16,4 +17,5 @@ export const examples = {
   '6': PointsWaves,
   '7': GradientEdgeSphere,
   '8': FullView,
+  '9': OrthographicCameraFullView,
 };
