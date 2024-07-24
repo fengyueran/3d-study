@@ -50,6 +50,11 @@ const treeData: DataNode[] = [
     key: '9',
     isLeaf: true,
   },
+  {
+    title: '10、自定义坐标轴',
+    key: '10',
+    isLeaf: true,
+  },
 ];
 
 interface Props {
