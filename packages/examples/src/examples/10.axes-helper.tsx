@@ -86,7 +86,6 @@ export const AxesHelper = () => {
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     // renderer.setClearColor(new THREE.Color(0x000));
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.autoClear = false;
     container.appendChild(renderer.domElement);
 
     // 创建场景
@@ -104,7 +103,7 @@ export const AxesHelper = () => {
     // 创建一个立方体表示场景中的物体
     const cube = new THREE.Mesh(
       new THREE.BoxGeometry(0.3, 0.3, 0.3),
-      new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+      new THREE.MeshBasicMaterial({ color: 'red' })
     );
     scene.add(cube);
 
@@ -123,31 +122,28 @@ export const AxesHelper = () => {
       orbitControls.update();
       requestAnimationFrame(render);
 
-      // renderer.clear();
-      // 渲染主场景
+      // 渲染主视图
       renderer.setViewport(0, 0, container.clientWidth, container.clientHeight);
+      renderer.setScissor(0, 0, container.clientWidth, container.clientHeight);
+      renderer.setScissorTest(true);
+      renderer.clear(); // 清除主视图区域
       renderer.render(scene, camera);
 
       // 渲染左下角的小视图
       const axesViewportWidth = 100;
       const axesViewportHeight = 100;
 
-      // renderer.setClearColor(0x000000); // 设置小视图的背景色为黑色
-
-      // Set the axes viewport
-      renderer.setViewport(
-        0, // Lower-left corner x
-        0, // Lower-left corner y
-        axesViewportWidth,
-        axesViewportHeight
-      );
-
+      // 设置小视图的视口和剪裁区域
+      renderer.setViewport(0, 0, axesViewportWidth, axesViewportHeight);
       renderer.setScissor(0, 0, axesViewportWidth, axesViewportHeight);
       renderer.setScissorTest(true);
 
+      // 调整小视图的摄像机位置和方向，使其独立于主视图
       axesCamera.position.copy(camera.position);
       axesCamera.quaternion.copy(camera.quaternion);
+
       renderer.render(axesScene, axesCamera);
+
       renderer.setScissorTest(false);
     }
     render();
