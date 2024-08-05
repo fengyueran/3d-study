@@ -8,7 +8,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-function createCustomAxesHelper(size: number) {
+const createCustomAxesHelper = (size: number) => {
   const axesGroup = new THREE.Group();
 
   // X轴（红色）
@@ -38,7 +38,6 @@ function createCustomAxesHelper(size: number) {
   const zAxis = new THREE.Line(zGeometry, zMaterial);
   axesGroup.add(zAxis);
 
-  // 添加标签
   const createLabel = (text: string, color: string) => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d')!;
@@ -57,25 +56,25 @@ function createCustomAxesHelper(size: number) {
     const texture = new THREE.CanvasTexture(canvas);
     const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
     const sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(0.2, 0.2, 1); // 调整标签的缩放比例
+    sprite.scale.set(6, 6, 1); // 调整标签的缩放比例
 
     return sprite;
   };
 
   const xLabel = createLabel('X', '#ff0000');
-  xLabel.position.set(size + 0.2, 0, 0);
+  xLabel.position.set(size + 6, 0, 0);
   axesGroup.add(xLabel);
 
   const yLabel = createLabel('Y', '#00ff00');
-  yLabel.position.set(0, size + 0.2, 0);
+  yLabel.position.set(0, size + 6, 0);
   axesGroup.add(yLabel);
 
   const zLabel = createLabel('Z', '#0000ff');
-  zLabel.position.set(0, 0, size + 0.2);
+  zLabel.position.set(0, 0, size + 6);
   axesGroup.add(zLabel);
 
   return axesGroup;
-}
+};
 
 export const AxesHelper = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -88,63 +87,69 @@ export const AxesHelper = () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    // 创建场景
     const scene = new THREE.Scene();
+    const aspect = container.clientWidth / container.clientHeight;
+    const d = 50;
+    const camera = new THREE.OrthographicCamera(
+      -d * aspect,
+      d * aspect,
+      d,
+      -d,
+      1,
+      600
+    );
+    camera.position.set(0, 20, 60);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-
-    // 设置相机的位置和朝向
-    camera.position.set(0, 0, 3);
-    camera.lookAt(0, 0, 0);
-
-    const axesHelper = new THREE.AxesHelper(1);
-    scene.add(axesHelper);
+    // 创建轨道控制器
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
 
     // 创建一个立方体表示场景中的物体
     const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(0.3, 0.3, 0.3),
+      new THREE.BoxGeometry(3, 3, 3),
       new THREE.MeshBasicMaterial({ color: 'red' })
     );
+
     scene.add(cube);
 
-    const orbitControls = new OrbitControls(camera, renderer.domElement);
+    // 创建小视图相机
+    const insetSize = 200;
+    const insetAspect = 1;
+    const insetCamera = new THREE.OrthographicCamera(
+      -d * insetAspect,
+      d * insetAspect,
+      d,
+      -d,
+      1,
+      1000
+    );
+    insetCamera.position.copy(camera.position);
+    insetCamera.quaternion.copy(camera.quaternion);
 
-    const axesScene = new THREE.Scene();
-    const axesCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-    axesCamera.position.set(0.5, 0.5, 1);
-    axesCamera.lookAt(axesScene.position);
+    // 创建小视图场景
+    const insetScene = new THREE.Scene();
+    const insetArrowHelper = createCustomAxesHelper(30);
+    insetScene.add(insetArrowHelper);
 
-    const customAxesHelper = createCustomAxesHelper(0.6);
-
-    axesScene.add(customAxesHelper);
-
+    // 动画循环
     function render() {
-      orbitControls.update();
       requestAnimationFrame(render);
+      controls.update();
 
       // 渲染主视图
       renderer.setViewport(0, 0, container.clientWidth, container.clientHeight);
       renderer.setScissor(0, 0, container.clientWidth, container.clientHeight);
       renderer.setScissorTest(true);
-      renderer.clear(); // 清除主视图区域
       renderer.render(scene, camera);
 
-      // 渲染左下角的小视图
-      const axesViewportWidth = 100;
-      const axesViewportHeight = 100;
-
-      // 设置小视图的视口和剪裁区域
-      renderer.setViewport(0, 0, axesViewportWidth, axesViewportHeight);
-      renderer.setScissor(0, 0, axesViewportWidth, axesViewportHeight);
+      // 渲染小视图
+      insetCamera.position.copy(camera.position);
+      insetCamera.quaternion.copy(camera.quaternion);
+      renderer.setViewport(0, 0, insetSize, insetSize);
+      renderer.setScissor(0, 0, insetSize, insetSize);
       renderer.setScissorTest(true);
-
-      // 调整小视图的摄像机位置和方向，使其独立于主视图
-      axesCamera.position.copy(camera.position);
-      axesCamera.quaternion.copy(camera.quaternion);
-
-      renderer.render(axesScene, axesCamera);
-
-      renderer.setScissorTest(false);
+      renderer.render(insetScene, insetCamera);
     }
     render();
   }, []);

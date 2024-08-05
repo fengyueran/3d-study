@@ -22,16 +22,16 @@ const vertexShader = `
 
 // 片段着色器
 const fragmentShader = `
+    uniform vec3 uColor;
     varying float vDot;
     void main() {
-        vec3 color = mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 0.0, 0.0), vDot);
+        vec3 color = mix(vec3(0.0, 0.0, 0.0), uColor, vDot);
         gl_FragColor = vec4(color, 1.0);
     }
 `;
 
 export const GradientEdgeSphere = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  console.log('99999');
   useEffect(() => {
     const container = containerRef.current!;
 
@@ -66,6 +66,9 @@ export const GradientEdgeSphere = () => {
     const shaderMaterial = new THREE.ShaderMaterial({
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
+      uniforms: {
+        uColor: { value: new THREE.Color(1.0, 0.0, 0.0) }, // 设置初始颜色为红色
+      },
     });
 
     // 创建球体几何体并应用着色器材质
