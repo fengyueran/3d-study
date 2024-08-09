@@ -8,6 +8,8 @@ import { GradientEdgeSphere } from './07.gradient-edge-sphere';
 import { FullView } from './08.full-view-perspective-camera';
 import { OrthographicCameraFullView } from './09.full-view-orthographic-camera';
 import { AxesHelper } from './10.axes-helper';
+import { Camera } from './11.camera';
+import { Quaternion } from './12.quaternion';
 
 export const examples = {
   '1': ParticleAnimation,
@@ -20,4 +22,6 @@ export const examples = {
   '8': FullView,
   '9': OrthographicCameraFullView,
   '10': AxesHelper,
+  '11': Camera,
+  '12': Quaternion,
 };
